@@ -35,6 +35,9 @@ curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
 
 k3d cluster create dev-cluster --port 8080:80@loadbalancer --port 8888:8888@loadbalancer --port 8443:443@loadbalancer
 
+sudo cp -r /root/.kube /home/vagrant
+sudo chown 1000:1000 /home/vagrant/.kube/config
+sudo chmod 644 /home/vagrant/.kube/config
 
 # ###############################################################
 # Argo CD install:
