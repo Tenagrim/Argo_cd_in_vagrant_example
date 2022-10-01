@@ -59,9 +59,7 @@ kubectl wait --for=condition=Ready --timeout=-1s  pods --all -n argocd
 kubectl apply -n argocd -f /vagrant/config/argocd_ingress.yaml
 kubectl apply -n argocd -f /vagrant/config/argocd_application_deploy.yaml
 
-
 # Change the argocd-server service type to LoadBalancer
 kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+sleep 40
 kubectl port-forward svc/argocd-server -n argocd 8080:443
-
-
