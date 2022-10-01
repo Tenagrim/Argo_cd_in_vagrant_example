@@ -33,7 +33,7 @@ curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
 # ###############################################################
 # K3D cluster
 
-k3d cluster create dev-cluster  # --port 8080:80@loadbalancer --port 8888:8888@loadbalancer --port 8443:443@loadbalancer
+k3d cluster create dev-cluster   --port 8080:80@loadbalancer --port 8888:8888@loadbalancer --port 8443:443@loadbalancer
 
 sudo cp -r /root/.kube /home/vagrant
 sudo chown 1000:1000 /home/vagrant/.kube
@@ -59,7 +59,11 @@ kubectl wait --for=condition=Ready --timeout=-1s  pods --all -n argocd
 kubectl apply -n argocd -f /vagrant/config/argocd_ingress.yaml
 kubectl apply -n argocd -f /vagrant/config/argocd_application_deploy.yaml
 
-# Change the argocd-server service type to LoadBalancer
-kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
-sleep 40
-kubectl port-forward svc/argocd-server -n argocd 8080:443
+
+
+
+echo "PASSWORD:"
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+
+while true; do kubectl port-forward --address 0.0.0.0 svc/argocd-server -n argocd 8090:443; sleep 2; done
+
