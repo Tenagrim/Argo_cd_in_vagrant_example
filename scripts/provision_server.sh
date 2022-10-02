@@ -69,6 +69,7 @@ kubectl wait --for=condition=Ready --timeout=-1s  pods --all -n argocd
 kubectl apply -n argocd -f /vagrant/config/argocd_ingress.yaml
 kubectl apply -n argocd -f /vagrant/config/argocd_application_deploy.yaml
 
+while ! kubectl get secret argocd-initial-admin-secret >/dev/null 2>/dev/null  -n argocd; do echo "Waiting for password. CTRL-C to abort."; sleep 10; done
 echo "PASSWORD:"
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
 
