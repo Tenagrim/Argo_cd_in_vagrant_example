@@ -13,8 +13,6 @@ Vagrant.configure("2") do |config|
   config.vm.define MASTER_NAME do |control|
     control.vm.hostname = MASTER_NAME
     control.vm.network :private_network, ip: MASTER_IP
-    control.vm.network :forwarded_port, host: 8080, guest: 8080
-    control.vm.network :forwarded_port, host: 8888, guest: 8888
     control.vm.synced_folder ".", "/vagrant", type: "virtualbox"
     control.vm.provision :shell, privileged: true, path: "scripts/provision_server.sh", args: [MASTER_IP]
     control.vm.provider "virtualbox" do |v|
