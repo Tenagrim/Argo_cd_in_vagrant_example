@@ -15,8 +15,6 @@ Vagrant.configure("2") do |config|
     control.vm.network :private_network, ip: MASTER_IP
     control.vm.synced_folder ".", "/vagrant", type: "virtualbox"
     control.vm.provision :shell, privileged: true, path: "scripts/provision_server.sh", args: [MASTER_IP]
-    control.vm.provision :shell, privileged: false, run: 'always', path: "scripts/port_forward.sh", args: ["will-playground-service", "8888", "8888", "dev" ]
-    control.vm.provision :shell, privileged: false, run: 'always', path: "scripts/port_forward.sh", args: ["argocd-server", "8090", "443", "argocd" ]
     control.vm.provider "virtualbox" do |v|
       v.name = MASTER_NAME
       v.gui = false

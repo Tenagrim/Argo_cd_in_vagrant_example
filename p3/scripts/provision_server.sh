@@ -61,6 +61,7 @@ kubectl create namespace dev
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.4.12/manifests/install.yaml
 # latest at 01.10.2022: https://raw.githubusercontent.com/argoproj/argo-cd/v2.4.12/manifests/install.yaml
 
+echo "[DEBUG] Wait for all argocd pods is up..."
 kubectl wait --for=condition=Ready --timeout=-1s  pods --all -n argocd
 # ###########
 # Ingress:
@@ -73,7 +74,10 @@ while ! kubectl get secret argocd-initial-admin-secret >/dev/null 2>/dev/null  -
 echo "PASSWORD:"
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
 
-#while true; do kubectl port-forward --address 0.0.0.0 svc/argocd-server -n argocd 8090:443; sleep 10; done &
-#while true; do kubectl port-forward --address 0.0.0.0 svc/will-playground-service -n dev 8888:8888; sleep 10; done &
+echo "[DEBUG] Wait for all dev pods is up..."
+kubectl wait --for=condition=Ready --timeout=-1s  pods --all -n argocd
+
+nohup bash -c "while true; do kubectl port-forward --address 0.0.0.0 svc/argocd-server -n argocd 8090:443; sleep 10; done &"
+nohup bash -c "while true; do kubectl port-forward --address 0.0.0.0 svc/will-playground-service -n dev 8888:8888; sleep 10; done &"
 
 
