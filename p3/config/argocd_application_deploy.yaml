@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Tenagrim/git_ops_argocg_configs.git
+    repoURL: https://github.com/Tenagrim/gshona_config.git
     targetRevision: HEAD
     path: manifests
   destination:
